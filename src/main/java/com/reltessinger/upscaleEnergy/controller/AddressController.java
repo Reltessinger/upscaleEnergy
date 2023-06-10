@@ -1,11 +1,10 @@
 package com.reltessinger.upscaleEnergy.controller;
 
+import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,71 +16,70 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.reltessinger.upscaleEnergy.Records.AddressRecord;
+import com.reltessinger.upscaleEnergy.config.ApplicationConfiguration;
 import com.reltessinger.upscaleEnergy.entity.AddressEntity;
 import com.reltessinger.upscaleEnergy.objects.Address;
+import com.reltessinger.upscaleEnergy.objects.records.AddressRecord;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Path;
-import jakarta.validation.Validation;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/address")
 public class AddressController {
 
+	@Autowired
+	private AddressEntity oAddressEntity;
+	
+	@Autowired
+	private ApplicationConfiguration oApplicationConfiguration;
+	
 	@GetMapping
 	public ResponseEntity<Collection<?>> getAllAddress() {
-		Collection<Address> oAddress = AddressEntity.mapAddress.values();
+		Collection<Address> oAddress = oAddressEntity.mapAddress.values();
 		
-		return ResponseEntity.status(HttpStatus.OK).body(oAddress);
+		return ResponseEntity.ok(oAddress);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getAddressById(@PathVariable Integer id) {
-		Address oAddress = AddressEntity.mapAddress.get(id);
+		Address oAddress = oAddressEntity.mapAddress.get(id);
 		if(oAddress == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address id "+ id + ", not found.");
 			
-		return ResponseEntity.status(HttpStatus.OK).body(oAddress.toAddressRecord());
+		return ResponseEntity.ok(oAddress.toAddressRecord());
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AddressRecord oAddressRecord) {
-		Set<ConstraintViolation<AddressRecord>> notValidated = Validation.buildDefaultValidatorFactory().getValidator().validate(oAddressRecord);
-		Map<Path, String> notValidatedToMap = notValidated.stream().collect(Collectors.toMap(notValidated1 ->  notValidated1.getPropertyPath(), notValidated1 ->  notValidated1.getMessage()));
-		
-		if(!notValidatedToMap.isEmpty())
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(notValidatedToMap);
-			
+	public ResponseEntity<?> create(@RequestBody @Valid AddressRecord oAddressRecord) throws URISyntaxException  {
 		int idAddress = new Random().nextInt(Integer.MAX_VALUE);
 		Address oAddress = oAddressRecord.toAddress();
 		oAddress.setId(idAddress);
-		AddressEntity.mapAddress.put(idAddress,oAddress);
+		oAddressEntity.mapAddress.put(idAddress,oAddress);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(oAddress);
+		return ResponseEntity.created(oApplicationConfiguration.getURI("/address/",idAddress)).body(oAddress);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody AddressRecord oAddressRecord) {
+	public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody @Valid AddressRecord oAddressRecord) {
 		Address oAddress = oAddressRecord.toAddress();
 		oAddress.setId(id);
-		if(AddressEntity.mapAddress.get(id)==null)
+		if(oAddressEntity.mapAddress.get(id)==null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address id "+ id + ", not found.");
 		
-		AddressEntity.mapAddress.put(id,oAddress);
+		oAddressEntity.mapAddress.put(id,oAddress);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(oAddress.toAddressRecord());
+		return ResponseEntity.ok("Address successfully updated!");
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		
-		if(AddressEntity.mapAddress.get(id)==null)
+		if(oAddressEntity.mapAddress.get(id)==null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address id "+ id + ", not found.");
 		
-		AddressEntity.mapAddress.remove(id);
+		oAddressEntity.mapAddress.remove(id);
 		
-		return ResponseEntity.status(HttpStatus.OK).body("Address deleted successfully.");
+		return ResponseEntity.ok("Address deleted successfully.");
 	}
-	
+		
 }

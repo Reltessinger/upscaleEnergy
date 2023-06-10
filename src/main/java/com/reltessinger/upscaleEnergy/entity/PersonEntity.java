@@ -10,6 +10,6 @@ import com.reltessinger.upscaleEnergy.objects.Person;
 @Component
 public class PersonEntity {
 	
-	public static Map<Integer,Person> mapPerson = new HashMap<Integer, Person>();
+	public Map<Integer,Person> mapPerson = new HashMap<Integer, Person>();
 
 }

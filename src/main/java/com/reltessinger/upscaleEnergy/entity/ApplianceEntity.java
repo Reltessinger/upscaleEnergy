@@ -10,6 +10,6 @@ import com.reltessinger.upscaleEnergy.objects.Appliance;
 @Component
 public class ApplianceEntity {
 	
-	public static Map<Integer,Appliance> mapAppliance = new HashMap<Integer, Appliance>();
+	public Map<Integer,Appliance> mapAppliance = new HashMap<Integer, Appliance>();
 
 }

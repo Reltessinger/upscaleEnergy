@@ -10,6 +10,6 @@ import com.reltessinger.upscaleEnergy.objects.Address;
 @Component
 public class AddressEntity {
 	
-	public static Map<Integer,Address> mapAddress = new HashMap<Integer, Address>();
+	public Map<Integer,Address> mapAddress = new HashMap<Integer, Address>();
 
 }
