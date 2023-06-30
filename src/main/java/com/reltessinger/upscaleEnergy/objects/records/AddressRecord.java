@@ -25,8 +25,11 @@ public record AddressRecord(
 		@Size(min=5, max=100, message="Rua deve ter entre 5 e 100 caracteres")
 		String city,
 		@NotBlank
-		@Size(min=5, max=100, message="Rua deve ter entre 5 e 100 caracteres")
+		@Size(min=3, max=100, message="Rua deve ter entre 3 e 100 caracteres")
 		String state,
+		@NotBlank
+		@Size(min=5, max=100, message="Rua deve ter entre 5 e 100 caracteres")
+		String country,
 		@NotNull
 		Boolean active) {
 	
@@ -38,6 +41,7 @@ public record AddressRecord(
 			oAddress.setPostalCode(this.postalCode());
 			oAddress.setCity(this.city());
 			oAddress.setState(this.state());
+			oAddress.setCountry(this.country());
 			oAddress.setActive(this.active());
 			return oAddress;
 		}

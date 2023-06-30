@@ -1,7 +1,5 @@
 package com.reltessinger.upscaleEnergy.objects;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import com.reltessinger.upscaleEnergy.objects.records.AddressRecord;
@@ -29,11 +27,11 @@ public class Address {
 	private String postalCode;
 	private String city;
 	private String state;
+	private String country;
 	private Boolean active;
-	private List<Appliance> lstAppliance;
 	
 	public AddressRecord toAddressRecord() {
-		AddressRecord oAddressRecord = new AddressRecord(this.street, this.number, this.district, this.postalCode, this.city, this.state, this.active);
+		AddressRecord oAddressRecord = new AddressRecord(this.street, this.number, this.district, this.postalCode, this.city, this.state, this.country, this.active);
 		return oAddressRecord;
 	}
 	

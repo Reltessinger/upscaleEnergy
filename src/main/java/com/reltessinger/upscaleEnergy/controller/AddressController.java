@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reltessinger.upscaleEnergy.config.ApplicationConfiguration;
-import com.reltessinger.upscaleEnergy.entity.AddressEntity;
 import com.reltessinger.upscaleEnergy.objects.Address;
 import com.reltessinger.upscaleEnergy.objects.records.AddressRecord;
+import com.reltessinger.upscaleEnergy.repository.AddressRepository;
 
 import jakarta.validation.Valid;
 
@@ -28,21 +28,21 @@ import jakarta.validation.Valid;
 public class AddressController {
 
 	@Autowired
-	private AddressEntity oAddressEntity;
+	private AddressRepository oAddressRepository;
 	
 	@Autowired
 	private ApplicationConfiguration oApplicationConfiguration;
 	
 	@GetMapping
 	public ResponseEntity<Collection<?>> getAllAddress() {
-		Collection<Address> oAddress = oAddressEntity.mapAddress.values();
+		Collection<Address> oAddress = oAddressRepository.mapAddress.values();
 		
 		return ResponseEntity.ok(oAddress);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getAddressById(@PathVariable Integer id) {
-		Address oAddress = oAddressEntity.mapAddress.get(id);
+		Address oAddress = oAddressRepository.mapAddress.get(id);
 		if(oAddress == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address id "+ id + ", not found.");
 			
@@ -54,7 +54,7 @@ public class AddressController {
 		int idAddress = new Random().nextInt(Integer.MAX_VALUE);
 		Address oAddress = oAddressRecord.toAddress();
 		oAddress.setId(idAddress);
-		oAddressEntity.mapAddress.put(idAddress,oAddress);
+		oAddressRepository.mapAddress.put(idAddress,oAddress);
 		
 		return ResponseEntity.created(oApplicationConfiguration.getURI("/address/",idAddress)).body(oAddress);
 	}
@@ -63,10 +63,10 @@ public class AddressController {
 	public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody @Valid AddressRecord oAddressRecord) {
 		Address oAddress = oAddressRecord.toAddress();
 		oAddress.setId(id);
-		if(oAddressEntity.mapAddress.get(id)==null)
+		if(oAddressRepository.mapAddress.get(id)==null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address id "+ id + ", not found.");
 		
-		oAddressEntity.mapAddress.put(id,oAddress);
+		oAddressRepository.mapAddress.put(id,oAddress);
 		
 		return ResponseEntity.ok("Address successfully updated!");
 	}
@@ -74,10 +74,10 @@ public class AddressController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		
-		if(oAddressEntity.mapAddress.get(id)==null)
+		if(oAddressRepository.mapAddress.get(id)==null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address id "+ id + ", not found.");
 		
-		oAddressEntity.mapAddress.remove(id);
+		oAddressRepository.mapAddress.remove(id);
 		
 		return ResponseEntity.ok("Address deleted successfully.");
 	}

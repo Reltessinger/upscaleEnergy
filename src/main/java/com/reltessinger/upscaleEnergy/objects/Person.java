@@ -1,7 +1,6 @@
 package com.reltessinger.upscaleEnergy.objects;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -31,11 +30,10 @@ public class Person {
 	private String mobile;
 	private String fiscalNumber;
 	private Gender gender;
-	private List<Address> lstAddress;
 	private Boolean active;
 	
 	public PersonRecord toPersonRecord() {
-		PersonRecord oPersonRecord = new PersonRecord(this.name, this.lastName, this.dateBirth, this.email, this.mobile, this.fiscalNumber, this.gender, this.lstAddress, this.active);
+		PersonRecord oPersonRecord = new PersonRecord(this.name, this.lastName, this.dateBirth, this.email, this.mobile, this.fiscalNumber, this.gender, this.active);
 		return oPersonRecord;
 	}
 	

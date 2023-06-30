@@ -1,11 +1,9 @@
 package com.reltessinger.upscaleEnergy.objects.records;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.reltessinger.upscaleEnergy.objects.Address;
 import com.reltessinger.upscaleEnergy.objects.Gender;
 import com.reltessinger.upscaleEnergy.objects.Person;
 
@@ -33,7 +31,6 @@ public record PersonRecord(
 		String fiscalNumber, 
 		@NotNull
 		Gender gender,
-		List<Address> lstAddress, 
 		@NotNull
 		Boolean active) {
 
@@ -46,7 +43,6 @@ public record PersonRecord(
 		oPerson.setMobile(this.mobile());
 		oPerson.setFiscalNumber(this.fiscalNumber());
 		oPerson.setGender(this.gender());
-		oPerson.setLstAddress(this.lstAddress());
 		oPerson.setActive(this.active());
 		return oPerson;
 	}

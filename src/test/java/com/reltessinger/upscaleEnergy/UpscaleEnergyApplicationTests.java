@@ -8,6 +8,7 @@ class UpscaleEnergyApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }

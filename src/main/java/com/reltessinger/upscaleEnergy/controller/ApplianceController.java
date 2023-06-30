@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reltessinger.upscaleEnergy.config.ApplicationConfiguration;
-import com.reltessinger.upscaleEnergy.entity.ApplianceEntity;
 import com.reltessinger.upscaleEnergy.objects.Appliance;
 import com.reltessinger.upscaleEnergy.objects.records.ApplianceRecord;
+import com.reltessinger.upscaleEnergy.repository.ApplianceRepository;
 
 import jakarta.validation.Valid;
 
@@ -27,21 +27,21 @@ import jakarta.validation.Valid;
 public class ApplianceController {
 
 	@Autowired
-	private ApplianceEntity oApplianceEntity;
+	private ApplianceRepository oApplianceRepository;
 	
 	@Autowired
 	private ApplicationConfiguration oApplicationConfiguration;
 	
 	@GetMapping
 	public ResponseEntity<Collection<?>> getAllAppliance() {
-		Collection<Appliance> oAppliance = oApplianceEntity.mapAppliance.values();
+		Collection<Appliance> oAppliance = oApplianceRepository.mapAppliance.values();
 		
 		return ResponseEntity.ok(oAppliance);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getApplianceById(@PathVariable Integer id) {
-		Appliance oAppliance = oApplianceEntity.mapAppliance.get(id);
+		Appliance oAppliance = oApplianceRepository.mapAppliance.get(id);
 		if(oAppliance == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appliance id "+ id + ", not found.");
 			
@@ -53,7 +53,7 @@ public class ApplianceController {
 		int idAppliance = new Random().nextInt(Integer.MAX_VALUE);
 		Appliance oAppliance = oApplianceRecord.toAppliance();
 		oAppliance.setId(idAppliance);
-		oApplianceEntity.mapAppliance.put(idAppliance,oAppliance);
+		oApplianceRepository.mapAppliance.put(idAppliance,oAppliance);
 		
 		return ResponseEntity.created(oApplicationConfiguration.getURI("/appliance/", idAppliance)).body(oAppliance);
 	}
@@ -62,10 +62,10 @@ public class ApplianceController {
 	public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody @Valid ApplianceRecord oApplianceRecord) {
 		Appliance oAppliance = oApplianceRecord.toAppliance();
 		oAppliance.setId(id);
-		if(oApplianceEntity.mapAppliance.get(id)==null)
+		if(oApplianceRepository.mapAppliance.get(id)==null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appliance id "+ id + ", not found.");
 		
-		oApplianceEntity.mapAppliance.put(id,oAppliance);
+		oApplianceRepository.mapAppliance.put(id,oAppliance);
 		
 		return ResponseEntity.ok("Appliance successfully updated!");
 	}
@@ -73,10 +73,10 @@ public class ApplianceController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		
-		if(oApplianceEntity.mapAppliance.get(id)==null)
+		if(oApplianceRepository.mapAppliance.get(id)==null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appliance id "+ id + ", not found.");
 		
-		oApplianceEntity.mapAppliance.remove(id);
+		oApplianceRepository.mapAppliance.remove(id);
 		
 		return ResponseEntity.ok("Appliance deleted successfully.");
 	}
