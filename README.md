@@ -9,6 +9,7 @@ Link do projeto no github: [UpscaleEnergy](https://github.com/Reltessinger/upsca
 
 Na primeira fase foi implementado um CRUD com persistência em memória para cada entidade Pessoa, Endereço e Eletrodoméstico, são realizadas validações antes de inserir ou atualizar uma informação para garantir que os dados enviados são válidos.
 
+No arquivo application.properties foi definido o path da aplicação "/upscaleEnergy" </br> 
 ## Entidades e Validações
 
 1.	Address</br>
