@@ -70,4 +70,4 @@ Link documentação do Postman: [Doc. Upscale Energy](https://documenter.getpost
 •	DELETE - /person/{id}</br>
 
 ## Tecnologias e Ferramentas utilizadas
-Java 17, Springboot, Maven, Lombok, Bean Validation, Eclipse, Postman.
+Java 17, Springboot, Maven, Lombok, Bean Validation, Eclipse, Postman, DTOs foram criados com Record.
