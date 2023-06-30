@@ -67,3 +67,6 @@ Link documentação do Postman: [Doc. Upscale Energy](https://documenter.getpost
 •	POST - /person</br>
 •	PUT - /person/{id}</br>
 •	DELETE - /person/{id}</br>
+
+## Tecnologias e Ferramentas utilizadas
+Java 17, Springboot, Maven, Lombok, Bean Validation, Eclipse, Postman.
